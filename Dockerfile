@@ -19,6 +19,7 @@ RUN     useradd rails -m --home-dir /var/rails --groups rvm
 USER    rails
 RUN     echo 'source /etc/profile.d/rvm.sh' >> ~/.bashrc
 RUN     echo 'source /etc/profile.d/rvm.sh' >> ~/.bash_profile
+RUN     echo "gem: --no-rdoc --no-ri" >> ~/.gemrc
 
 # Cloning the latest version of Merci Edgar
 RUN     git clone https://github.com/rsareth/edgar.git /var/rails/edgar
