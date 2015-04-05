@@ -20,5 +20,5 @@ RUN     mkdir /var/rails
 RUN     git clone https://github.com/rsareth/edgar.git /var/rails/edgar
 WORKDIR /var/rails/edgar
 # Some gem need specific package within the OS.
-RUN     apt-get --yes install qt5-default libqt5webkit5-dev libpq-dev
+RUN     apt-get --yes install redis-server qt5-default libqt5webkit5-dev libpq-dev
 RUN     /bin/bash -l -c "bundle install"
