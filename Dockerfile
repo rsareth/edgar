@@ -15,8 +15,8 @@ WORKDIR /var/rails/edgar
 # Installing RVM for RUBY-2.0.0
 RUN     gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 RUN     curl -sSL https://get.rvm.io | bash -s stable
-RUN     echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"' >> ~/.bashrc
-RUN     echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"' >> ~/.bash_profile
+RUN     echo 'source "$HOME/.rvm/scripts/rvm"' >> ~/.bashrc
+RUN     echo 'source "$HOME/.rvm/scripts/rvm"' >> ~/.bash_profile
 RUN     echo "gem: --no-rdoc --no-ri" >> ~/.gemrc
 RUN     /bin/bash -l -c "rvm requirements"
 RUN     /bin/bash -l -c "rvm autolibs enable"
