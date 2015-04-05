@@ -15,7 +15,7 @@ RUN     /bin/bash -l -c "rvm install 2.0.0-p643"
 RUN     /bin/bash -l -c "gem install bundle"
 
 # Create a specific user for Merci Edgar
-RUN     useradd rails -m --home-dir /var/rails --groups rvm
+RUN     useradd rails -m --home-dir /var/rails
 USER    rails
 RUN     echo 'source /etc/profile.d/rvm.sh' >> ~/.bashrc
 RUN     echo 'source /etc/profile.d/rvm.sh' >> ~/.bash_profile
@@ -28,4 +28,5 @@ WORKDIR /var/rails/edgar
 
 # Dependencies for Merci Edgar
 # Some gem need specific package within the OS.
+USER    root
 RUN     /bin/bash -l -c "bundle install"
