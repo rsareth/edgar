@@ -12,7 +12,7 @@ RUN     echo "gem: --no-rdoc --no-ri" >> ~/.gemrc
 ENV     PATH /usr/local/rvm/bin:$PATH
 RUN     /bin/bash -l -c "rvm requirements"
 RUN     /bin/bash -l -c "rvm autolibs enable"
-RUN     /bin/bash -l -c "rvm install 2.0.0"
+RUN     /bin/bash -l -c "rvm install 2.0.0-p643"
 RUN     /bin/bash -l -c "ruby --version"
 RUN     /bin/bash -l -c "gem install bundle"
 
