@@ -5,7 +5,7 @@ RUN     apt-get --yes install redis-server qt5-default libqt5webkit5-dev libpq-d
 
 
 # Create a specific user for Merci Edgar
-RUN     useradd rails -m --home-dir /var/rails --groups rvm
+RUN     useradd rails -m --home-dir /var/rails
 USER    rails
 
 # Cloning the latest version of Merci Edgar
