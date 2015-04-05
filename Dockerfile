@@ -1,6 +1,7 @@
 FROM    ubuntu:14.04
 RUN     apt-get --quiet --yes update && apt-get --yes upgrade
 RUN     apt-get --yes install git curl vim
+# Some gem need specific package within the OS.
 RUN     apt-get --yes install redis-server qt5-default libqt5webkit5-dev libpq-dev
 
 # Installing RVM for RUBY-2.0.0
@@ -25,8 +26,6 @@ RUN     echo "gem: --no-rdoc --no-ri" >> ~/.gemrc
 RUN     git clone https://github.com/rsareth/edgar.git /var/rails/edgar
 WORKDIR /var/rails/edgar
 
-
 # Dependencies for Merci Edgar
-# Some gem need specific package within the OS.
 USER    root
 RUN     /bin/bash -l -c "bundle install"
