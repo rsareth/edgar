@@ -42,6 +42,8 @@ If you are on ArchLinux you will "find some help here":https://wiki.archlinux.or
   * a sidekiq worker with @sidekiq@
   * a @rails server@
 
+via docker run this command : docker run -t rsareth/edgar -e USER_DB=<YOUR_USER> -e PASSWORD_DB=<YOUR_PASSWORD> /var/rails/edgar/script/start.sh
+
 Open a browser on "http://www.lvh.me:3000":http://www.lvh.me:3000
 
 h2. Documentation and Support
