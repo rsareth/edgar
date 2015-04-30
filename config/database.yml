@@ -31,10 +31,13 @@ test: &test
   password: PstxloP1
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
+  adapter: postgresql
+  encoding: unicode
+  host: localhost
+  database: merciedgar
   pool: 5
-  timeout: 5000
+  username: <%= ENV['USER_DB'] %>
+  password: <%= ENV['PASSWORD_DB'] %>
 
 cucumber:
   <<: *test
