@@ -30,14 +30,5 @@ test: &test
   username: merciedgar
   password: PstxloP1
 
-production:
-  adapter: postgresql
-  encoding: unicode
-  host: localhost
-  database: merciedgar
-  pool: 5
-  username: <%= ENV['USER_DB'] %>
-  password: <%= ENV['PASSWORD_DB'] %>
-
 cucumber:
   <<: *test
