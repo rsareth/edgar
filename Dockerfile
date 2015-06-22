@@ -29,3 +29,8 @@ WORKDIR /var/rails/edgar
 # Dependencies for Merci Edgar
 USER    root
 RUN     /bin/bash -l -c "bundle install"
+
+# Auto run the rails app
+EXPOSE  3000
+ENV     RAILS_ENV development_docker
+CMD     ["/var/rails/edgar/script/edgar-entrypoint.sh"]
