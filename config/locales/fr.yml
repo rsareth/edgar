@@ -148,6 +148,8 @@ fr:
       wrong_length:
         one: "ne fait pas la bonne longueur (doit comporter un seul caractère)"
         other: "ne fait pas la bonne longueur (doit comporter %{count} caractères)"
+      carrierwave_direct_filename_invalid: "Fichier invalide : "
+      carrierwave_direct_allowed_extensions: "Seules les extensions %{extensions} sont autorisées."
     template: &errors_template
       body: "Veuillez vérifier les champs suivants : "
       header:
@@ -225,6 +227,9 @@ fr:
   # remove these aliases after 'activemodel' and 'activerecord' namespaces are removed from Rails repository
   activemodel:
     errors:
+      contacts_import:
+        filename:
+          blank: "blabla"
       <<: *errors
   activerecord:
     errors:
@@ -275,14 +280,27 @@ fr:
   
   activemodel:
     attributes:
-      import:
+      contacts_import:
         filename: Nom de fichier
     errors:
       models:
-        import:
+        contacts_import:
           attributes:
+            base:
+              import_cannot_be_launched_if_import_already_running: "Un autre import dans le compte est déjà en cours. Attendez qu'il soit terminé"
             filename:
-              blank: "Vous n'avez pas choisi de fichier .mml"
+              blank: "Vous n'avez pas choisi de fichier à importer"
+            import_cannot_be_launched_if_import_already_running: "Un autre import dans le compte est déjà en cours. Attendez qu'il soit terminé"
+        spreadsheet_file:
+          attributes:
+            nb_lines:
+              less_than: "Le fichier ne peut contenir plus de %{count} lignes"
+            encoding:
+              inclusion: "Le fichier n'est pas correctement encodé"
+            readable?:
+              inclusion: "Impossible de lire le fichier"
+            name_header_exist:
+              inclusion: "Le fichier ne contient pas la colonne nom"
   
   activerecord:
     models:
@@ -308,6 +326,8 @@ fr:
         depth: Profondeur
         height: Hauteur
         width: Largeur
+      venue/rooms/capacities:
+        nb: Jauge
       import:
         filename: Le nom de fichier
     errors:
@@ -343,8 +363,14 @@ fr:
           updated: "La personne %{name} a été modifiée avec succès"
   helpers:
     browse: Parcourir...
+    label:
+      contacts_import_uploader:
+        contacts_file: "Fichier à importer :"
     submit:
+      disable_with: "En cours..."
       update: "Enregistrer les modifications"
       create: "Créer"
       create_and_edit: "Ajouter davantage d'infos"
-      
+      contacts_import:
+        create: "Lancer l'import"
+        test: "Tester avant d'importer"

@@ -9,7 +9,17 @@ $('document').ready(function() {
     event.preventDefault();
     $(this).parent('.notice').remove();
   });
-  
+
+	// Ajax spinner
+
+	$("*[data-spinner]").on('ajax:beforeSend', function(e){
+	  $($(this).data('spinner')).show();
+	  e.stopPropagation(); //Don't show spinner of parent elements.
+	});
+	$("*[data-spinner]").on('ajax:complete', function(){
+	  $($(this).data('spinner')).hide();
+	});
+
   /*
   Gmaps.map.callback = function() {
   google.maps.event.addListenerOnce(Gmaps.map.serviceObject, 'idle', function(){
@@ -73,7 +83,18 @@ $('document').ready(function() {
 
 	});
 */
-
+  
+  
+	//______________________ Btn-in-list TOGGLE
+	$('li.btn-in-list.expandable a').on('click', function (event) {
+	  event.stopPropagation(); event.preventDefault();
+    var $form = $(this).closest('li').find('.form-in-list');
+    $form.slideToggle(200);
+    $form.find("[autofocus]:first").focus();
+    $(this).closest('li').toggleClass('toggled');
+    
+	});
+  
 
 	//______________________ Existing Entry - Cancel Button
 	$('#activity .list-large > li .cancel').on('click', function (event) {
@@ -151,7 +172,8 @@ function navToggle() {
 
   
   
-//  _________________________________ Clickable Dropdown
+//  _________________________________ Clickable Dropdown -- Old "Recent" BTN behaviour
+/*
 clickerShow = function(e) {
   $('.click-nav .js ul').slideToggle(200);
 	$('.clicker').toggleClass('active');
@@ -178,6 +200,8 @@ $(function() {
       	}	
 			});
 });
+*/
+
 /*
 $.fn.fadeUp = function() {
   
@@ -199,44 +223,113 @@ $(function() {
   }
 });
 
+//  __________________________________________________________________ "Tools" (search & recent) BTN behaviour
+
+var currentnav='';
+var currenttest='';
+var goActive= 1;
+
+checkTools = function(){
+  //if ( $('.leftmenu').find('.nav').find('.active-tool') ){
+  if ( ($('#recent-nav').hasClass("active-tool")) || ($('#search-nav').hasClass("active-tool")) ) {
+    goActive = 0;
+    } else {
+    goActive = 1;
+  }
+    console.log("goActive=" + goActive );
+}
+
+checkCurrent= function(){
+  console.log(currentnav);
+  currenttest = $('.leftmenu').find('.nav').find('.active');
+  console.log("ct=" + currenttest.length );
+  
+  if ( currenttest.length ){
+    currentnav = currenttest;
+    //goActive= 1;
+  } //else {goActive= 0;}
+  
+  console.log("cnav="+currentnav);
+  
+  //checkTools();
+}
+
+//  _________________________________ "Recent" BTN behaviour
+toggleRecent = function(){
+  checkCurrent();
+  if ( ($('#recent-menu').width()==290)  ){
+    // HIDE
+    if (goActive==1) { currentnav.addClass("active"); }
+		$('#recent-nav').removeClass('active-tool');
+    $('#recent-menu').removeClass('expanded');
+    $('#recent-menu').hide();
+    //$('#recent-menu').css('width', '0px');
+  
+   } else {
+     // SHOW
+     
+     if (goActive==1) { currentnav.removeClass("active"); }
+     $('#recent-nav').addClass('active-tool');
+      $('#recent-menu').show();
+     $('#recent-menu').addClass("expanded");
+     //$('#recent-menu').css('width', '290px');
+     
+     if ($('#search-nav').hasClass("active-tool")) {
+       toggleSearch();
+     }
+    }
+};
+
+$('#recent-nav a').click(function(event) { event.preventDefault();
+  if ( !($('#recent-nav').hasClass("active-tool")) ) {
+  toggleRecent();
+  }
+});
+
+$(document).click(function() {
+  if ($('#recent-menu').width()==290) {
+    toggleRecent();
+  }
+});
+
 
 //  _________________________________ SEARCH TOGGLE
-var currentnav='';
 toggleSearch = function(){
-  if ($('#search-nav').hasClass("active")) {
+  checkCurrent();
+  
+  if ($('#search-nav').hasClass("active-tool")) {
     // HIDE
-    $('#search-nav').removeClass("active");
+    if (goActive==1) { currentnav.addClass("active"); }
+    $('#search-nav').removeClass("active-tool");
     $('#thesearch input').val("");
     $('#thesearch').hide();
     
-    currentnav.addClass("active");
   } else {
     // SHOW
-  // $('.searchahead').typeahead();
-  
-  // get and apply the correct TOP position
-  //var offset = $('#search-nav').offset();
-  //console.log(offset.top);
-  //$('#thesearch').find('input').css('top', offset.top + 'px');
-  
-  currentnav = $('.leftmenu').find('.nav').find('.active');
-  currentnav.removeClass("active");
-  
-  $('#thesearch').show();
-  $('#search-nav').addClass("active");
-  $('#thesearch').find("[autofocus]:first").focus();
+    // $('.searchahead').typeahead();
+    // get and apply the correct TOP position
+    //var offset = $('#search-nav').offset();//console.log(offset.top);
+    //$('#thesearch').find('input').css('top', offset.top + 'px');
+    
+    if (goActive==1) { currentnav.removeClass("active"); }
+    
+    $('#thesearch').show();
+    $('#search-nav').addClass("active-tool");
+    $('#thesearch').find("[autofocus]:first").focus();
   }
 }
 
-$('#search-nav a').click(function(event) {
-  event.preventDefault();
-  toggleSearch()
-});
-$('.search-backdrop').click(function(event) {
-  event.preventDefault();
+$('#search-nav a').click(function(event) { event.preventDefault();
+  //goActive= 0;
   toggleSearch();
 });
+$('.search-backdrop').click(function(event) { event.preventDefault();
+  //goActive= 1;
+  toggleSearch();
+  
+});
 
+//  __________________________________________________________________
 
 
 //  _________________________________

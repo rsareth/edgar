@@ -1,4 +1,7 @@
 - content_for :scripts do
+  = javascript_include_tag "http://maps.google.com/maps/api/js?sensor=false"
+  = javascript_include_tag "jquery.ui.addresspicker"
+
   = javascript_include_tag "contacts"
   = javascript_include_tag "tag"
   = javascript_include_tag "contacts_form"
@@ -58,10 +61,10 @@
           
           = f.fields_for :contact do |c|
             -#  ________________________________________________________ TAGS V1
-            = c.input :network_tags, label: "Réseaux <br><span class='help-block'>(séparés par des virgules)</span>", :input_html => { :class => "span6 network_tags_input", :placeholder =>"…", data: {autocomplete_source: networks_path} }
+            = c.input :network_tags, label: "Réseaux <br><span class='help-block'>(séparés par des virgules)</span>".html_safe, :input_html => { :class => "span6 network_tags_input", :placeholder =>"…", data: {autocomplete_source: networks_path} }
 
             -#  ________________________________________________________ TAGS V1
-            = c.input :custom_tags, label: "Tags personnalisés<br><span class='help-block'>(séparés par des virgules)</span>", :input_html => { :class => "span6 custom_tags_input", :placeholder =>"…", data: {autocomplete_source: customs_path} }
+            = c.input :custom_tags, label: "Tags personnalisés<br><span class='help-block'>(séparés par des virgules)</span>".html_safe, :input_html => { :class => "span6 custom_tags_input", :placeholder =>"…", data: {autocomplete_source: customs_path} }
           
             -# ________________________________________________________ Observations
             = c.input :remark
@@ -112,7 +115,7 @@
                   = address.link_to_remove :title => "Remove this address" do
                     %i.entypo.edi-minus2
                   = address.input :street, label:"Addresse", :wrapper => :append do
-                    = address.input_field :street,:placeholder =>"Addresse",  :label => false, :input_html => { :class => "input-xlarge" }
+                    = address.input_field :street,:placeholder =>"Addresse",  :label => false, :class => "input-xlarge street"
                     = address.input_field :kind, :label => false, :collection => [:main_address, :admin_address], :selected => "Work", :input_html => { :class => "add-on btn dropdown-toggle" }
                   
                   .control-group.nolabel

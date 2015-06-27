@@ -1,20 +1,17 @@
 class PeopleController < AppController
   include ApplicationHelper
-  # GET /people
-  # GET /people.json
+
   def index
+    json = []
     if params[:term].present?
       @contacts = Contact.order(:name).where(contactable_type: "Person").where("lower(name) LIKE ?", "%#{params[:term].downcase}%")
-      json = []
       @contacts.each { |c| json.push({value:c.name, label:c.name, new: "false", avatar: c.avatar_url(:thumb)}) }
-      
+
       unless @contacts.map(&:name).map(&:downcase).include?(params[:term].downcase)
         json.push({value:params[:term], label: "Créer la personne " + params[:term], new:"true"})
       end
-      
-      render json: json
     end
-    
+    render json: json
   end
 
   # GET /people/1
@@ -43,6 +40,7 @@ class PeopleController < AppController
     @person.name = params[:name] if params[:name].present?
     ps = @person.people_structures.build
     ps.structure = Structure.find(params[:structure_id]) if params[:structure_id]
+    ps.title = params[:title] if params[:title]
     ps.structure = nil if !ps.structure.is_a? Structure
 
     respond_to do |format|
@@ -61,6 +59,7 @@ class PeopleController < AppController
   # POST /people.json
   def create
     @person = Person.new(params[:person])
+    @person.set_contact_name
 
     respond_to do |format|
       if @person.save
@@ -77,7 +76,6 @@ class PeopleController < AppController
   # PUT /people/1.json
   def update
     @person = Person.find(params[:id])
-
     respond_to do |format|
       if @person.update_attributes(params[:person])
         format.html { redirect_to @person, notice: t("activerecord.notices.models.person.updated", name: @person) }

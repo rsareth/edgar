@@ -1,7 +1,5 @@
-  
 .row-fluid.toppage.showitem
   %header
-    
     .rightrow
       .meta
         -# _________________________ contacted
@@ -9,18 +7,7 @@
           %a.ico.contacted.full{:href => "#"}
         - else
           %a.ico.contacted{:href => "#"}
-        //%a.ico.dealed{:href => "#"}
-
-        / _________________________ favorite
-        - if contact.favorite?(current_user)
-          = link_to remove_to_favorites_contact_path(contact), remote: true do
-            %i.ico.favorite.full{id: "fav_contact_#{contact.id}"}
-        - else
-          = link_to add_to_favorites_contact_path(contact), remote: true do
-            %i.ico.favorite{id: "fav_contact_#{contact.id}"}
-
-
-        = link_to edit_link_path, :class => "shybtn editbtn", :title => "<h5>Éditer cette fiche</h5>Modifié le #{contact.updated_at.present? ? contact.updated_at.to_date : '22/01/2013'}", "data-toggle" => "tooltip", "data-placement" => "bottom-right", "data-html" => "true" do
+        = link_to edit_link_path, :class => "shybtn editbtn", :title => "Éditer cette fiche. Modifié le #{contact.updated_at.present? ? contact.updated_at.to_date : '22/01/2013'}", "data-toggle" => "tooltip", "data-placement" => "bottom-right", "data-html" => "true" do
           %i.entypo.edi-pencil
     .mainrow
       - if @person
@@ -28,32 +15,33 @@
       - if !@person
         .pic= image_tag contact.avatar
       %h2= contact.name
-    
+
       = tag_link(contacts_path(category: contact.fine_model.class.name.underscore.pluralize),t(contact.fine_model.class.name.underscore,scope:"activerecord.models"),"tag-custom")
-    
+
       - if contact.making_prospecting?
         %a.badge.badge-green.badge-capsule En recherche active
       - if contact.has_duplicates?
         = link_to "Doublon", contacts_path(duplicate_of: contact.dup_id), class: "a badge badge-grey doublons"
-    
+      - if contact.test?
+        = link_to "Test", contacts_path(imported_at: contact.imported_at), class:"a badge badge-grey"
+
       .infos
         .infos-line
           /-  if contact.try(:capacities)
           /  - contact.capacities.each do |capacity|
           /    %span.jauge= render capacity
           = yield :contact_infoline
-            
+
           - if contact.city
             %span.location
               %span.city= contact.city
               = link_to contact.address.department_name, only_contacts_path(filter:"dept",no:contact.address.department_code) if contact.address.department_name
         .tags
           = render partial: "tags/tags", locals: {contact: contact}
-      
+
   - if notice.present?
     .notice= notice
-    
-      
+
 .row-fluid
   .span12
     .tabbable
@@ -69,17 +57,15 @@
             %span.badge.badge-shy="#{@pending_tasks.size}"
 
         = yield :navtabs
-          
-          
+
       .tab-content
         / ________________________________________________________ activity
         #activity.tab-pane.active
           = render partial:'contacts/activity', locals: {contact: contact}
-                  
+
         / ________________________________________________________ infos
         #infos.tab-pane
           = render partial:'infos'
-        
 
         / ________________________________________________________ tasks
         #tasks.tab-pane

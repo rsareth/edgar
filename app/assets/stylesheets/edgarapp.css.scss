@@ -12,6 +12,8 @@ $lbeige:  lighten( $beige, 5% );
 $dbeige:  rgba(194, 194, 177, 1);
 $dbeige1:  rgba(221, 221, 212, 1);
 $dbeige2: rgba(209, 209, 197, 1);
+$brown: rgba(148, 148, 119, 1);
+
 $orange:  #ff5a3e;
 $yellow:  #EDE232;
 $green:   rgba(80, 190, 180, 1);//#50bfb2
@@ -73,6 +75,14 @@ $white:   #fff;
 	-ms-transition: $prop $speed ease-in-out;
 	-o-transition: $prop $speed ease-in-out;
 	transition: $prop $speed ease-in-out;
+}
+
+@mixin tranformition($speed) {
+  -webkit-transition: -webkit-transform $speed ease-in-out;
+  -moz-transition: -moz-transform $speed ease-in-out;
+	-ms-transition: -ms-transform $speed ease-in-out;
+	-o-transition: -o-transform $speed ease-in-out;
+	transition: transform $speed ease-in-out;
 }
 
 @mixin square($px) {
@@ -198,8 +208,10 @@ textarea {@include borderbox;}
 .ico {vertical-align: middle; font-size:22px; margin-left:2px;
   border-bottom:none !important;
   &:before { font-family: 'icomoon'; line-height: 1;}
-  &:visited, &:active, &:link {color:$dblue;} 
+  &:visited, &:active, &:link {color:$dblue; } 
 }
+
+.icon:before {font-family: 'icomoon'; line-height: 1; margin-left:2px; vertical-align: middle;}
 
 .ico.favorite {
   &:before, &.full:hover:before {content: "\e01e";}//.edi-heart-2
@@ -220,6 +232,77 @@ textarea {@include borderbox;}
 
 .ico.export:before {
 	content: "\e015";
+}
+
+
+.ico.listed {
+  &:before, &.full:hover:before {content: "\e6a8";}//.edi-bookmark
+  &:hover:before, &.full:before {content: "\e6a8";} //.edi-bookmark
+}
+
+
+
+/* ___________________________________________________  Bootstrap dropdown-menu  */
+
+.dropdown.dropdown-hover:hover > ul.dropdown-menu {
+  display: block; 
+}
+
+.dropdown-in-list{
+  display:inline-block;
+  font-size: 16px;
+  & > ul.dropdown-menu {
+    right: 0; left: auto; //bottom-left position
+    background:$dbeige1;
+    min-width:250px;
+  }
+  & > a {
+    //@extend .btn-shy;
+    
+    border-radius: 6px;
+    padding: 6px 6px 14px;
+    
+    &:hover {background:$dbeige1; color:$dblue;}
+  }
+  &:hover > a {background:$dbeige1;}
+}
+.dropdown-menu {
+  .divider { margin:0;}
+  .special {background:$beige;}
+  .special i{margin-left: 0;}
+}
+
+/* ___________________________________________________  Bootstrap dropdown-menu  */
+
+.dropdown-menu > li[role="presentation"] {padding: 6px 20px 7px;}
+
+.dropdown-menu > li > a, .dropdown-menu > li > .dropdown {padding: 6px 20px 7px;}
+.dropdown-menu > li > a {
+  &:hover, &:focus { background:$green;
+  }
+}
+
+.dropdown-menu {
+  color:$mblue;
+  padding: 0;
+  border:none;
+  @include roundcornersFX(3px);
+  & > li {
+    &:first-child > a {padding-top:12px;}
+    &:last-child > a {padding-bottom:14px;}
+  }
+}
+
+
+.dropdown-menu > li > .dropdown {
+  &:hover {background:$white; color:$dblue;}
+  
+  .dropdown-menu{width:100%; min-width:250px;}
+}
+
+.list-lists li a.icon:before { content: "\e6a8";
+  margin-left: 2px;
+  padding-right: 6px;
 }
 
 
@@ -252,7 +335,7 @@ textarea {@include borderbox;}
 
 
 
-a, .btn-link {color:$dblue;
+a, .btn-link {color:$dblue; font-weight: 300;
   &:hover, &:focus {color:$green; text-decoration:none;}
 } //&:active,
 
@@ -263,6 +346,8 @@ a, .btn-link {color:$dblue;
 .showlink:not(.tag) { border-bottom : dotted 1px $green ;
   &:hover {color:$green; text-decoration:none; border-color:transparent;}
 }
+
+.notice .btn {margin-top:12px;}
 
 .infos-line a, .infos a {@extend .showlink;}
 
@@ -276,7 +361,7 @@ a, .btn-link {color:$dblue;
 }
 
 .maincontentinner {
-	padding: 48px 64px 34px 48px; //34px 64px 34px 34px ;
+	padding: 40px 64px 34px 48px; //34px 64px 34px 34px ;
   position:relative;
 }
 /*
@@ -347,23 +432,23 @@ $lbrown: rgba(209, 209, 197, 1);
 	@include roundcorners;
 	padding: 25px 24px 25px 88px;//20px 24px 20px 90px;
 	background-repeat : no-repeat;
-	background-position: 22px 15px ;
+	background-position: 22px 18px ;
 	margin-bottom:24px;
 	//width: 40px;
 	min-height: 25px;
 	position:relative;
 	background-image: url('appli/sprites/notices-info.png');  background-color: $lblue2;
-	.noticetitle {font-weight:bold; clear:right;
-	  &:after{content:" — ";};
-	  } //display:block;
+	.noticetitle {font-weight:bold; clear:right;display:block;
+	  //&:after{content:" — ";};
+	  } //
     
   .btn-close{display:none;  font-size:36px; margin-top: -5px; position:absolute; top:25px; right:24px;
     &:hover{color:$red;};
     
-    &.ico:before {content: "\e07b";} //.edi-cross
+    &.ico:before {content: "\e678";} //.edi-cross
     }
     
-  &:hover .btn-close{display:block;};
+  &:hover .btn-close{display:block !important;}
 	&:hover {background-color:$white !important;}
 	
 	&.warning { background-image: url('appli/sprites/notices-warning.png');  background-color: $lyellow;}
@@ -379,10 +464,11 @@ $lbrown: rgba(209, 209, 197, 1);
 
 /* ______________________________________________________________ BTNs   */
 
-.btn {padding: 6px 12px; font-size:16px; text-shadow:none;}
+.btn {padding: 6px 12px; font-size:16px; text-shadow:none; font-weight: normal;} //font-weight: 300;
 
 .btn.disabled, .btn[disabled] {
   background:$vlblue;
+  &:hover{background:$vlblue;}
 }
 .btn:hover, btn:focus {
   //transition: background 0.2s;
@@ -402,10 +488,10 @@ $lbrown: rgba(209, 209, 197, 1);
 
 .btn-secondary {
   @extend .btn-primary;
-  background:$vlblue;
+  background:$brown;//$vlblue;
   color:$white;
   &:hover, &:focus, &:active {
-    background:$green;
+    background:$dblue;
     color:$white;
   }
 }
@@ -415,7 +501,7 @@ $lbrown: rgba(209, 209, 197, 1);
   background:$dbeige1;
   color:$mblue;
   &:hover, &:focus, &:active {
-    background:$green;
+    background:$dblue;
     color:$white;
   }
 }
@@ -426,7 +512,7 @@ $lbrown: rgba(209, 209, 197, 1);
   background:$orange;
   color:$white;
   &:hover, &:focus, &:active {
-    background:$green;
+    background:$dblue;//$green;
     color:$white;
   }
 }
@@ -439,7 +525,7 @@ $lbrown: rgba(209, 209, 197, 1);
 
 #menu-vertical {
   position: fixed;
-  right: -100px;
+  right: -104px;
   top: 153px;//112px;
   @include rotate( 270 );
   .btn {
@@ -454,6 +540,8 @@ $lbrown: rgba(209, 209, 197, 1);
     margin-bottom: 48px;
   }
 }
+
+.file.required + .input-append {margin-top:10px;}
 /*
 #menu-vertical {
   position: fixed;
@@ -476,7 +564,7 @@ $lbrown: rgba(209, 209, 197, 1);
 
 
 /* ______________________________________________________________ Headlines   */
-h1, h2, h3, h4 {font-weight:300; display:inline; line-height:inherit;}
+h1, h2, h3, h4, h5 {font-weight:300; display:inline; line-height:inherit;}
 
 h1 {font-size:37px; color:$orange;}
 h2 {font-size:32px; //font-weight:bold;
@@ -731,9 +819,12 @@ a.pull-right {float:right;}
 	display:block;
 	&:focus { text-decoration:none;}
 	i.ico { margin-bottom:3px; }//6px
+  @include transition(all, .1s)
 }
 
-.leftmenu li a:hover, .leftmenu li a:focus, .leftmenu li.active a, .leftmenu li.active a:hover, .leftmenu li.active a:focus, .leftmenu li.tour-step-backdrop a  {
+.leftmenu li a:hover, .leftmenu li a:focus, .leftmenu li.active a, .leftmenu li.active a:hover, .leftmenu li.active a:focus, .leftmenu li.tour-step-backdrop a,
+.leftmenu li.active-tool a:focus, .leftmenu li.active-tool a:hover, .leftmenu li.active-tool a 
+{
   background: $beige;
   color:$dblue;
   & .righticon {display:block;}
@@ -763,8 +854,8 @@ a .logo {
 .leftmenu .righticon,
 .logo .righticon {
   float: right; display:none; margin-top:6px; margin-right: 6px;
-  
-}  
+}
+
 .logo .righticon {
   margin-top: 37px;
 }
@@ -803,6 +894,47 @@ i {font-style: normal;}
 }
 */
 
+ul#recent-menu{
+  width:0px;
+  @include transition(width, .3s);
+  left: 240px;
+  position:fixed;
+  background:$dbeige2;
+  display:block;
+  top:0px;
+  height:100%;
+  z-index:2500;
+  padding:0;
+  overflow:hidden;
+  li {width:290px;}
+  
+  li a, li.list-header {padding:7px 28px 10px;
+    .infos {
+      margin-left:52px;
+      span{font-size:16px;color:$dblue; line-height: 19px;display: block;margin-top: 2px;}
+      span:last-child{font-size:13px;color:$mblue;
+        line-height: 16px;
+      }
+      ;}
+    }
+    
+  li a:hover{color:$dblue; background:white;};  
+  //li:first-child a{padding-top:28px;};
+  li.list-header {padding-top:28px; color:$mblue; };
+  .pic{height:34px;width:34px; margin-top:3px;}
+  
+  &.expanded{width:290px;box-shadow: 5px 0 5px -5px #333;}
+}
+
+.small ul#recent-menu {left: 78px;}
+
+#recent-nav.active-tool a {background:$dbeige2;}
+#recent-nav .righticon {display:none; margin-right: 21px;}
+.leftpanel:not(.small) {
+#recent-nav.active-tool .righticon,
+#recent-nav:hover .righticon, #recent-nav:focus .righticon, 
+ {display:block;}
+ }
 
 /* NAV BAR / rightbt _______________________________ */
 /*
@@ -846,7 +978,7 @@ li a.rightbt {float:right;
 
 
 .account-tab a.rightbt { margin-right:0; margin-top:-3px;} /* ok */
-
+/*
 .clicker .rightbt {
   margin-right: 22px;
   width: 16px;
@@ -856,21 +988,28 @@ li a.rightbt {float:right;
 .clicker.active .rightbt {
   @include rotate( 180 );
 }
+*/
 
 .caret-ed {
   &:before {content: "\e6ce";} //.edi-arrow-down-5
-  width: 16px;
+  width: 16px !important;
   display : inline-block;
-  @include transition(transform, .2s)
+  //@include transition(all, .1s);
+  @include tranformition(.1s);
+  font-size:.8em;
+}
+
+.caret-ed-right{
+  //@extend .caret-ed;
+  &:before {content: "\e6d0";}
 }
 
 .dropdown-toggle:active .caret-ed, .dropdown-toggle:focus .caret-ed,
-.filters-trigger.active .caret-ed {
-  -moz-transform:rotate(180deg); //firefox
-  -webkit-transform:rotate(180deg); //Chrome, Safari
-  -o-transform:rotate(180deg); //Opera
+.filters-trigger.active .caret-ed,
+.active-tool .caret-ed
+ {
+  @include rotate(180);
 }
-	
 
 a.btn-iconic {
   display:inline-block;
@@ -970,8 +1109,7 @@ legend {font-size: 20px;
   select { width: 237px !important;}
 }
 
-.message a, .notice a { border-bottom:dotted 1px $green; }
-
+.message a, .notice a:not(.btn) { border-bottom:dotted 1px $green; }
 
 /*  ________________________________________ CUSTOM checkbox & radio */
 
@@ -1196,7 +1334,7 @@ legend {font-size: 20px;
 #plusmenu {
   position: fixed;
   width:45px;
-  top:46px;
+  top:33px;
   color:#fff;
   z-index:800;
 }
@@ -1205,7 +1343,7 @@ legend {font-size: 20px;
 .pluslist {
   display:inline-block;
   position:fixed;
-  top:46px;
+  top:33px;
   float:right;
   right:-295px;// - 315 -255px;
   font-size:20px;
@@ -1296,7 +1434,7 @@ legend {font-size: 20px;
 .shybtn{
   font-size:16px;
   padding: 4px 12px;
-  padding:2px 8px;
+  padding:2px 8px 0px;
   margin-left:4px;
   text-align: center;
   border: solid 1px $vlblue;
@@ -1388,8 +1526,8 @@ a.label-large {
 .label-large {
   h4 { font-size:22px; display:block;}
   p { font-size:16px; color:$mblue;}
-  i:before{ line-height:140px;}
-  i {
+  
+  &>i {
     font-size:70px;
     display:inline-block;
     width:140px;
@@ -1399,7 +1537,22 @@ a.label-large {
     -moz-border-radius: 200px;
     border-radius: 200px;
     margin-bottom:8px;
+    text-align: center;
+    &:before{ line-height:140px;}
   }
+}
+
+.label-large-horizontal {
+  display:inline-block;
+  width: 100%;
+  &>i  {
+    margin-right:20px;
+    float:left;
+  }
+  .message{
+    margin-top:24px;
+    display:block;
+    }
 }
 
 .modal {
@@ -1508,10 +1661,6 @@ span.boolean{display:inline-block;}
 }
 
 
-.nested-fields, .links {position: relative;
-  &:hover {background-color:$white;}
-}
-
 .remove_nested_fields, .add_nested_fields {
   margin-left:220px; font-size:18px; display:block;
   //position:absolute;
@@ -1536,16 +1685,17 @@ input.other { margin-left:-2px;}
 
 .fields-group .fields:not(:last-child) {margin-bottom:10px;};
 
-
+.nested-fields, .links {
+  position: relative;
+  //&:hover {background-color:$white;}
+}
 
 label .help-block { margin:0; font-size:13px;}
 
 .fields-group { padding: 0;
-  &:hover {background-color:$white;}
+  //&:hover {background-color:$white;}
 }
 
-
-  
 .fields {margin-bottom: 0px;
   //&:hover {background-color:$white;}
   }
@@ -1764,6 +1914,24 @@ ul.ui-autocomplete { position:absolute; background:$white; @include roundcorners
 }
 
 /*  _____________________________________________________ thesearch   */
+
+.input-flat{
+  background:$green;
+  &:focus{background:$green; color:$white;
+  @include plholder ($white);
+  };
+}
+
+input.input-flat-brown {
+  background:$dbeige2;
+  &:focus{
+    background:$dbeige2; color:$white;
+    @include plholder ($white);
+  };
+  //
+}
+
+
 #thesearch {
   z-index: 200;
   position:fixed;
@@ -1781,15 +1949,11 @@ ul.ui-autocomplete { position:absolute; background:$white; @include roundcorners
     height:52px;
     line-height:52px;
     width:100%;
-    background:$green;
-    color:$white;
     font-size:22px;
     @include roundcornersFX(0);
     @include borderbox;
     //@include box-shadow(inset 5px 1px 1px rgba(0, 0, 0, 0.075));
     @include box-shadow(0px, 0px, 15px, rgba(0, 0, 0, 0.7), "");
-    &:focus{background:$green;};
-    @include plholder ($white);
     }
 }
 
@@ -1905,14 +2069,14 @@ header .badge.badge-capsule {padding: 6px 12px; margin-top:5px;}
     position:relative;
     clear:both;
     background:$beige;
-    @include transition("background-color", 0.2s);
+    @include transition(background, 0.2s);
     //@include transition("width", 0.2s);
     &:last-child{ border:none;}
   }
-  li:hover .actions { display:block;}
+  &>li:hover .actions { display:block;}
   
-  li:hover .mini-map { display:none;}
-  li:hover{
+  &>li:hover .mini-map { display:none;}
+  &>li:hover, &>li.toggled, &>li.active {
     background:$white;
     //width:102%;
     //@include transfX;
@@ -1934,6 +2098,9 @@ header .badge.badge-capsule {padding: 6px 12px; margin-top:5px;}
 }
 //a[id*='Some:Same']
 
+.list-large#show-team li {
+  min-height: 69px;
+}
 
 
 /*  _____________________________________________________  ROWS   */
@@ -1965,12 +2132,307 @@ header .badge.badge-capsule {padding: 6px 12px; margin-top:5px;}
 
 
 .meta { float:right; }
-.meta i {display:inline-block;font-size:20px;}
+.meta > i {display:inline-block;font-size:20px;}
 //.list-large .meta { position: absolute; right:0; top:24px;}
 
 
+
+
+/*  _____________________________________________________  BULK   */
+
+
+
+.bulk-actions-activation {
+  &.active {background:$orange;}
+}
+
+.dropdown-menu {
+  top: initial;
+}
+
+.bulkbox {
+  float:left; width:0px;
+  display:inline-block;
+  overflow: hidden;
+  //& > span > input[type='checkbox'] + label {background-position: 0 -48px !important;}
+  &.active {width:40px;}
+  @include transition(width, .2s)
+}
+
+
+.bulk-panel {
+  position:fixed;
+  width:100%;
+  height:53px;
+  top:-90px;
+  background:$white;
+  z-index: 1999;
+  padding-top: 33px;
+  border-bottom:solid 1px $orange;
+  &.active{top:0px;}
+}
+
+//.sorters
+.bulk-panel .bulkbox {margin-top:4px; height: 26px; width:40px;}
+
+.btn.bulk-switch-off {
+  right: 68px;
+  position: fixed;
+  background:$orange;
+  color:$white;
+}
+
+.btn.delete-btn:hover{background:$orange; color:$white; }
+.bulk-switch:hover{background:$orange; };
+
+.bulk-panel .btn.active {background:$green;color:$white;}
+
+.subpage-nav .ico.edi-import {font-size:18px; height:5px;}
+.subpage-nav .btn { 
+  margin-top:-17px;
+  
+  //padding:4px 10px;
+}
+/*  _____________________________________________________  LISTS   */
+
+
+.list-items > li.btn-in-list {
+  & > a {color: $dblue; display:block;
+    font-size:24px;
+    padding-top:10px;
+    padding-bottom:10px;
+  }
+  
+  & > a:hover, &.toggled a {
+    color:$green;
+    span{display:inline-block;};
+  };
+  
+  & > a i {font-size:36px; display:inline-block; margin-left: -5px;
+    vertical-align:middle;
+    width: 62px;
+    text-align: center;
+    }
+  
+  span {
+    display:none; vertical-align: text-bottom;
+    margin: 0 10px;}
+  
+  border-bottom:none;
+  //min-height:60px !important;
+  min-height:initial !important;
+  padding-top: 0;
+  padding-bottom: 0;
+  //&.toggled{padding-bottom: 10px;}
+}
+
+
+.btns-in-list {
+  a {color: $dblue; display:block; font-size:20px;
+    padding-top:20px;}
+  span a:hover, &:hover i{color:$green;};
+  i {font-size:36px; display:inline;
+    }
+  &:hover span {display:inline;};
+   
+  span a {display:inline;};
+  span {display:none; margin: 0 ;}
+}
+
+
+.form-in-list {
+  padding-bottom: 16px;
+  padding-left:72px;
+  display:none;
+  form {margin:0;}
+}
+
+
+#pending_tasks { //.list-medium
+  .btn-in-list {min-height:30px !important;
+    a i {width: 25px;margin-left: -4px;}
+    //span{font-size:20px;}
+  }
+}
+
+
+.inline-form button {
+  vertical-align: top;
+}
+
+input[type="text"].input-xlarge {
+  @include borderbox;
+  //height:26px;
+  height:42px;
+  font-size: 20px;
+  padding: 12px 12px 8px;
+  font-size:20px;
+  //width:100%;
+}
+
+.align-right{text-align:right;}
+
+li {line-height: inherit;}
+
+.list-header .meta {position:absolute; top:0; right:0;}
+
+
+button.shybtn {padding:4px 8px;}
+#contact-list.list-large .dropdown button {
+  margin-top : -3px;
+}
+
+
+/* _______________________________________________________  dummy   */
+  
 .dummy {position:absolute; top:0;margin-left:-48px; margin-top:-11px; display:none; z-index:3000;}
 .dumshow {display:block;}
+
+/* _______________________________________________________  List_large   */
+
+#contact-list {
+  margin-top:20px;
+  li.list-header {
+    margin-top:30px;
+    margin-bottom:10px;
+  }
+}
+
+#contact-list.list-large>li:not(.list-header),
+#projects-list >li {min-height: 111px;}
+
+#contact-list.list-large h3 .contact-type {
+  color: $lblue;
+  font-size:14px;
+  &:hover{color:$green;};
+}
+
+
+
+.list-large {
+  .actions {top:48px;}
+  .actions>*{display: inline-block;}
+  .content {font-size:15px;color:$dblue;}
+  h4 {margin-top:0px; margin-bottom: 11px; color:$dblue;}
+  &>li {
+    //padding: 20px 0 10px;
+    padding: 13px 0 4px;
+    min-height:66px;
+    
+    &.list-header { padding:0; min-height: 10px; border:none;
+      margin-bottom:10px;
+      &:hover{background:none;}}
+  }
+  
+  color:$vlblue;
+  .rightrow {width:90px;}
+  h3{ display:block; margin-top:0px; margin-bottom: 12px; font-size:25px;}
+  //&.cards {min-height: 60px;}
+}
+
+.list-large + li {padding:0;}
+
+nav.pagination{ display: inline-block;}
+
+
+
+#team .list-large h4 {display:block;}
+
+
+#activity .list-large  {
+  h4, .infos {display:inline-block; margin-right:10px; font-size:21px;}
+  .pic-mini {
+    margin: 0 4px;
+    text-decoration:none; width:23px;}
+  h4 {color:$mblue;}
+  i.ico {vertical-align: text-top;}
+}
+
+li.system-reporting {
+  //background-color:$dbeige1;
+  background: $lbeige url(appli/dots_bkg.gif) repeat top left;
+  
+}
+
+#reporting_project_id {float:left;}
+
+
+
+/* ____________________________________________________________ List_medium  */
+.list-medium li {
+  .title {font-size:20px; margin-bottom:8px; margin-top:-2px;}
+  .infos-line{
+    .pic-mini {width:20px;  margin-right: 6px;}
+    a {font-size:16px; }
+    .infos-part{display:inline-block;margin-right:10px; //min-width:100px;
+    }
+  }
+  //line-height:28px;
+  //a {display:block; }
+  min-height:28px;
+  padding:18px 0px;
+  //border-bottom: dotted 1px lighten( $dblue, 60% );
+  .badge {@include roundcornersFX(6px); font-size:14px; padding:5px 10px; float:right;}
+  /*.span7 {font-size:17px;
+    a { margin-left:25px; }
+    }
+  .span3 {font-size:15px; color:$lblue;
+    a {color:$lblue;
+    &:hover {color:$green;}
+    }
+    }*/
+  input[type="checkbox"] {
+      margin: 6px 14px 0 0 ;
+      float:left;
+  }
+  &:hover .badge { display:none;}
+  .shybtn { padding:0px 8px; line-height:21px; height:24px;}
+  //.pic img {margin-top:-3px;}
+  .actions {position:relative;}
+  
+}
+
+#users-list li { min-height:62px;
+  padding: 18px 10px;
+}
+
+//.s1of2 {display:inline-block; width:40%;}
+.list-medium {
+  .btn-in-list a i {font-size:30px !important;}
+  .btn-in-list a { padding-top:0;}
+}
+
+.infos {color:$mblue;} 
+
+/*
+.list-tasks li:not(:first-child) {
+  @extend .list-medium li;
+};
+*/
+
+#pending_tasks_wrapper {
+  margin-bottom: 60px;
+}
+
+
+/*  _____________________________________________________ list-small // USERS */
+.list-small {
+  @extend .list-medium;
+  font-size:16px;
+  line-height: 1.4em;
+  li {
+    border:none;
+    min-height:none;
+    padding:10px 0px 5px;
+  }
+  h3 { font-size:22px;}
+  .infos-line{margin-top:5px;
+    a {font-size:15px;}
+  }
+}
+
+form#contact_us .uvFieldTextarea { height:150px; };
+
 /* __________________________________ tags   */
 
 .tags {
@@ -2096,6 +2558,10 @@ ul.tagit li.tagit-choice-editable {
 .mini-map.france.reg-8 {background-position: -525px -185px;}
 .mini-map.france.reg-9 {background-position: -525px -275px;}
 
+.mini-map.world {
+  background: url(appli/sprites/france-minimap-sprite.png) no-repeat top left;
+  background-position: -525px -365px;}
+
 
 
 .status{float:right;}
@@ -2121,194 +2587,6 @@ ul.tagit li.tagit-choice-editable {
 
 
 
-
-/*  _____________________________________________________  LISTS   */
-
-
-.btn-in-list {
-  & a {color: $dblue; display:block; font-size:20px;
-    padding-top:20px;}
-  & a:hover{color:$green;};
-  & a i {font-size:36px; display:inline; margin-left: -5px;
-    }
-  & a:hover span{display:inline;};
-  & span {display:none; margin: 0 10px;}
-}
-
-.btns-in-list {
-  & a {color: $dblue; display:block; font-size:20px;
-    padding-top:20px;}
-  & span a:hover, &:hover i{color:$green;};
-  & i {font-size:36px; display:inline;
-    }
-  &:hover span {display:inline;};
-   
-  & span a {display:inline;};
-  & span {display:none; margin: 0 ;}
-}
-
-.align-right{text-align:right;}
-
-li {line-height: inherit;}
-
-.list-header .meta {position:absolute; top:0; right:0;}
-
-
-button.shybtn {padding:4px 8px;}
-#contact-list.list-large .dropdown button {
-  margin-top : -3px;}
-  
-  
-
-
-/* _______________________________________________________  List_large   */
-
-#contact-list {
-  margin-top:20px;
-  li.list-header {
-    margin-top:30px;
-    margin-bottom:10px;
-  }
-}
-
-#contact-list.list-large>li:not(.list-header),
-#projects-list >li {min-height: 111px;}
-
-#contact-list.list-large h3 .contact-type {
-  color: $lblue;
-  font-size:14px;
-  &:hover{color:$green;};
-}
-
-
-
-.list-large {
-  .actions {top:56px;}
-  .actions>*{display: inline-block;}
-  .content {font-size:15px;color:$dblue;}
-  h4 {margin-top:0px; margin-bottom: 11px; color:$dblue;}
-  &>li {
-    //padding: 20px 0 10px;
-    padding: 13px 0 4px;
-    min-height:66px;
-    
-    &.list-header { padding:0; min-height: 10px; border:none;
-      margin-bottom:10px;
-      &:hover{background:none;}}
-  }
-  
-  color:$vlblue;
-  .rightrow {width:90px;}
-  h3{ display:block; margin-top:0px; margin-bottom: 12px; font-size:25px;}
-  //&.cards {min-height: 60px;}
-}
-
-.list-large + li {padding:0;}
-
-nav.pagination{ display: inline-block;}
-
-
-
-#team .list-large h4 {display:block;}
-
-
-#activity .list-large  {
-  h4, .infos {display:inline-block; margin-right:10px; font-size:21px;}
-  .pic-mini {
-    margin: 0 4px;
-    text-decoration:none; width:23px;}
-  h4 {color:$mblue;}
-  i.ico {vertical-align: text-top;}
-}
-
-li.system-reporting {
-  //background-color:$dbeige1;
-  background: $lbeige url(appli/dots_bkg.gif) repeat top left;
-  
-}
-
-#reporting_project_id {float:left;}
-
-
-
-/* ____________________________________________________________ List_medium  */
-.list-medium li {
-  .title {font-size:20px; margin-bottom:8px; margin-top:-2px;}
-  .infos-line{
-    .pic-mini {width:20px;  margin-right: 6px;}
-    a {font-size:16px; }
-    .infos-part{display:inline-block;margin-right:10px; //min-width:100px;
-    }
-  }
-  //line-height:28px;
-  //a {display:block; }
-  min-height:28px;
-  padding:18px 0px;
-  //border-bottom: dotted 1px lighten( $dblue, 60% );
-  .badge {@include roundcornersFX(6px); font-size:14px; padding:5px 10px; float:right;}
-  /*.span7 {font-size:17px;
-    a { margin-left:25px; }
-    }
-  .span3 {font-size:15px; color:$lblue;
-    a {color:$lblue;
-    &:hover {color:$green;}
-    }
-    }*/
-  input[type="checkbox"] {
-      margin: 6px 14px 0 0 ;
-      float:left;
-  }
-  &:hover .badge { display:none;}
-  .shybtn { padding:0px 8px; line-height:21px; height:24px;}
-  //.pic img {margin-top:-3px;}
-  .actions {position:relative;}
-  
-}
-
-#users-list li { min-height:62px;
-  padding: 18px 10px;
-}
-
-//.s1of2 {display:inline-block; width:40%;}
-.list-medium {
-  .btn-in-list a i {font-size:30px !important;}
-  .btn-in-list a { padding-top:0;}
-}
-
-.infos {color:$mblue;} 
-
-/*
-.list-tasks li:not(:first-child) {
-  @extend .list-medium li;
-};
-*/
-
-#pending_tasks_wrapper {
-  margin-bottom: 60px;
-}
-
-
-
-/*  _____________________________________________________ list-small // USERS */
-.list-small {
-  @extend .list-medium;
-  font-size:16px;
-  line-height: 1.4em;
-  li {
-    border:none;
-    min-height:none;
-    padding:10px 0px 5px;
-  }
-  h3 { font-size:22px;}
-  .infos-line{margin-top:5px;
-    a {font-size:15px;}
-  }
-}
-
-form#contact_us .uvFieldTextarea { height:150px; };
-
-
-
 /*  _____________________________________________________ VIEW_SHOW   */
 //.toppage {background:#fff;}
 //.showitem header {}
@@ -2329,7 +2607,7 @@ header {
     
   } 
   .pic{width:80px; height:80px; margin-top: -4px; }
-  .rightrow {width:110px;}
+  .rightrow {width:130px;}
   .mainrow{overflow: inherit;}
 }
 
@@ -2602,7 +2880,7 @@ $tooltipTXT: $white;
 
 /* PAGE PADDED */
 
-.maincontentinner { padding: 48px 0 34px 0;
+.maincontentinner { padding: 46px 0 34px 0;
 }
 
 .page-title {@include borderbox;}
@@ -2690,27 +2968,6 @@ form .tabbable .tab-pane > *
 .popover[class*="tour-"] .popover-navigation *[data-role=prev]:before {content: "\e6cd";}
 .popover[class*="tour-"] .popover-navigation *[data-role=end]:before {content: "\e678";} //.edi-cross
 
-
-/* ___________________________________________________  Bootstrap dropdown-menu  */
-
-.dropdown-menu > li[role="presentation"] {padding: 10px 0;}
-
-.dropdown-menu > li > a {
-  padding: 6px 20px 9px;
-  &:hover, &:focus { background:$green;
-  }
-}
-
-.dropdown-menu {
-  color:$mblue;
-  padding: 0;
-  border:none;
-  @include roundcornersFX(3px);
-  & > li {
-    &:first-child a {padding-top:12px;}
-    &:last-child a {padding-bottom:14px;}
-  }
-}
 
 /*
 .video-discipline{

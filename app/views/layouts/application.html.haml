@@ -5,31 +5,23 @@
   %body
     = render 'layouts/ga'
     #mainwrapper.mainwrapper
-      
+
       .togglemenu
         = render 'layouts/togglemenu'
-        
-      .sticker.sticker-beta
-        /Version Bêta-test
-        BETA
-        
+
       #plusmenu
         = render 'layouts/plus_menu' if ["index","show"].include?(params[:action]) && (controller_name != "projects")
         /= yield(:plus_menu)
-        
+
       .leftpanel
         = render 'layouts/left_panel'
-        
+
       .mainpanel
         = render 'layouts/search_modal'
         .maincontent
           .maincontentinner#top
             = yield
-            
-      /.rightpanel
-      /  = yield(:right_panel)
-    
+
     = render 'layouts/modal'
-      
     = render 'layouts/javascripts_app'
 

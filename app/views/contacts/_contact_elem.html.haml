@@ -1,13 +1,5 @@
 .rightrow
   .meta
-    -# _________________________ favorite
-    - if contact.favorite?(current_user)
-      = link_to remove_to_favorites_contact_path(contact), remote: true do
-        %i.ico.favorite.full{id: "fav_contact_#{contact.id}"}
-    - else
-      = link_to add_to_favorites_contact_path(contact), remote: true do
-        %i.ico.favorite{id: "fav_contact_#{contact.id}"}
-
     -# _________________________ contacted
     - if contact.contacted?
       %a.ico.contacted.full{:href => "#"}
@@ -15,9 +7,13 @@
       %a.ico.contacted{:href => "#"}
     -# _________________________ dealed
     -# %a.ico.dealed{:href => "#"}
-    
-  = content_tag("div",nil, class:"mini-map france reg-#{contact.address.region_code}") if contact.address.present?
-  
+
+  - if contact.address.present?
+    - if contact.address.country == "FR"
+      = content_tag("div",nil, class:"mini-map france reg-#{contact.address.region_code}") if contact.address.region_code.present?
+    - else
+      = content_tag("div",nil, class:"mini-map world") if contact.address.present?
+
   .actions
     = link_to edit_link_path, :class => "shybtn" do
       %i.entypo.edi-pencil

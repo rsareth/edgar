@@ -31,10 +31,9 @@ class Structure < ActiveRecord::Base
   # delegate :avatar, to: :structurable
 
   mount_uploader :avatar, AvatarUploader
-  
+
   validates_presence_of :contact
   # validates_associated :contact
-
 
   def kind
     fm = self.fine_model
@@ -42,7 +41,7 @@ class Structure < ActiveRecord::Base
       fm.class.name.underscore
     end
   end
-  
+
   def kind=(k)
     unless structurable.present?
       case k
@@ -50,7 +49,7 @@ class Structure < ActiveRecord::Base
         v = Venue.new
         self.structurable = v
         v.structure = self
-        
+
       when "festival"
         f = Festival.new
         self.structurable = f
@@ -58,9 +57,9 @@ class Structure < ActiveRecord::Base
       when "show_buyer"
         s = ShowBuyer.new
         self.structurable = s
-        s.structure = self 
+        s.structure = self
       end
-    end 
+    end
   end
 
   def fine_model
@@ -98,7 +97,7 @@ class Structure < ActiveRecord::Base
 
   def deep_xml(builder=nil)
     to_xml(
-      :builder => builder, :skip_instruct => true, :skip_types => true, 
+      :builder => builder, :skip_instruct => true, :skip_types => true,
       except: [:id, :created_at, :updated_at, :account_id, :avatar, :structurable_type, :structurable_id]
       ) do |xml|
       contact.deep_xml(xml)
@@ -112,16 +111,15 @@ class Structure < ActiveRecord::Base
         end
       end
       xml.base64_avatar do
-        xml.filename self.avatar.file.filename 
+        xml.filename self.avatar.file.filename
         xml.content self.base64_avatar
       end  unless self.avatar_url == self.avatar.default_url
-      
-    end    
+    end
   end
 
-  def self.from_merciedgar_hash(structure_attributes, imported_at, custom_tags)  
+  def self.from_merciedgar_hash(structure_attributes, imported_at, custom_tags)
     avatar_attributes = structure_attributes.delete("base64_avatar")
-    
+
     contact_attributes = structure_attributes.delete("contact")
 
     people_attributes = structure_attributes.delete("people")
@@ -129,7 +127,7 @@ class Structure < ActiveRecord::Base
     structure = Structure.new(structure_attributes)
 
     people_array = people_attributes["person"]
-    
+
     if people_array.is_a?(Array)
       people_array.each do |person_hash|
         person = Person.find_or_initialize_by_first_name_and_last_name(person_hash["first_name"],person_hash["last_name"])
@@ -142,7 +140,7 @@ class Structure < ActiveRecord::Base
           person = duplicates.where(imported_at: imported_at).first.try(:fine_model)
           unless person
             first_name = "#{person_hash["first_name"]} ##{nb_duplicates + 1}"
-            
+
             person = Person.new(last_name:person_hash["last_name"], first_name: first_name)
             person.build_contact.imported_at = imported_at
             person.contact.duplicate = old_person.contact
@@ -152,7 +150,7 @@ class Structure < ActiveRecord::Base
         ps = structure.people_structures.build
         ps.person = person
         ps.title = person_hash["title"]
-      end   
+      end
     else
       if people_array.is_a?(Hash)
         person_hash = people_array
@@ -166,7 +164,7 @@ class Structure < ActiveRecord::Base
           person = duplicates.where(imported_at: imported_at).first.try(:fine_model)
           unless person
             first_name = "#{person_hash["first_name"]} ##{nb_duplicates + 1}"
-            
+
             person = Person.new(last_name:person_hash["last_name"], first_name: first_name)
             person.build_contact.imported_at = imported_at
             person.contact.duplicate = old_person.contact
@@ -178,12 +176,42 @@ class Structure < ActiveRecord::Base
         ps.title = person_hash["title"]
       end
     end
-      
 
-    
     contact = Contact.new_from_merciedgar_hash(contact_attributes, imported_at, custom_tags)
     structure.contact = contact
     structure.upload_base64_avatar(avatar_attributes)
     structure
   end
+
+  def self.from_csv(row)
+    structure = Structure.new
+    people = {}
+    row.keys.each do |key|
+      elements = key.to_s.split('_')
+      attribute = elements.shift
+      title = elements.map(&:capitalize).join(' ')
+      if title.present? && Contact::VALID_CSV_KEYS.include?(attribute)
+        people[title] ||= {}
+        people[title][attribute.to_sym] = row[key.to_sym]
+      end
+    end
+
+    people.each do |title, person_hash|
+      person_name = person_hash[:nom]
+      if person_name && person_name.strip.length > 1 && title != "programmateur"
+        ps = structure.people_structures.build
+        ps.title = title
+        person_hash[:imported_at] = row[:imported_at]
+        person_hash[:first_name_last_name_order] = row[:first_name_last_name_order]
+        ps.person = Person.from_csv(person_hash)
+        underscore_title = title.split.map(&:downcase).join('_')
+        person_hash_keys_in_row = person_hash.keys.map{ |key| [key.to_s,underscore_title].join('_').to_sym }
+        row.delete_if{|key| person_hash_keys_in_row.include?(key)}
+      end
+    end
+
+    structure.contact, invalid_keys = Contact.from_csv(row, true)
+    [structure, invalid_keys]
+  end
+
 end

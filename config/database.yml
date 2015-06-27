@@ -1,22 +1,14 @@
-# SQLite version 3.x
-#   gem install sqlite3
-#
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem 'sqlite3'
-#development:
-#  adapter: sqlite3
-#  database: db/development.sqlite3
-#  pool: 5
-#  timeout: 5000
-
-development:
+config: &config
   adapter: postgresql
+  pool: 5
   encoding: unicode
   host: localhost
+
+development:
   database: merciedgar
-  pool: 5
   username: merciedgar
   password: PstxloP1
+  <<: *config
 
 development_docker:
   adapter: postgresql
@@ -31,13 +23,16 @@ development_docker:
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test: &test
-  adapter: postgresql
-  encoding: unicode
-  host: localhost
   database: merciedgar_test
-  pool: 5
   username: merciedgar
   password: PstxloP1
+  <<: *config
+
+production:
+  database: merciedgar_prod
+  username: merciedgar
+  password: PstxloP1
+  <<: *config
 
 cucumber:
   <<: *test

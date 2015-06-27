@@ -21,20 +21,17 @@ class Person < ActiveRecord::Base
   has_many :people_structures, dependent: :destroy
   has_many :relatives, dependent: :destroy
   has_many :schedulings, foreign_key: "scheduler_id"
-  
+
   validates_presence_of :first_name
   validates_presence_of :last_name
-  # validates_associated :contact
 
   accepts_nested_attributes_for :people_structures, :reject_if => :all_blank, allow_destroy: true
   accepts_nested_attributes_for :contact, :reject_if => :all_blank, allow_destroy: true
 
   delegate :imported_at, :tasks, :reportings, :network_list, :custom_list, :favorite?, :contacted?, :phone_number, :email_address, :addresses, :emails, :phones, :websites, to: :contact
 
-  before_validation :set_contact_name
-  
   mount_uploader :avatar, AvatarUploader
-  
+
   def fine_model
     self
   end
@@ -42,8 +39,27 @@ class Person < ActiveRecord::Base
   def name
     [self.last_name, self.first_name].compact.join(' ')
   end
-  
-  # name : last_name first_name
+
+  def first_name=(fname)
+    if fname.present?
+      new_first_name = fname.split.map{|w| w.split('-').map(&:capitalize).join('-')}.join(' ')
+      write_attribute(:first_name, new_first_name)
+    else
+      write_attribute(:first_name, fname)
+    end
+    set_contact_name
+  end
+
+  def last_name=(lname)
+    if lname.present?
+      new_last_name = lname.split.map{|w| w.split('-').map(&:capitalize).join('-')}.join(' ')
+      write_attribute(:last_name, new_last_name)
+    else
+      write_attribute(:last_name, lname)
+    end
+    set_contact_name
+  end
+
   def name=(name)
     words = name.split(' ')
     self.last_name = words.shift
@@ -52,7 +68,7 @@ class Person < ActiveRecord::Base
 
   def set_contact_name
     self.build_contact unless contact.present?
-    contact.name = "#{last_name} #{first_name}" if self.changed.include?("first_name") || self.changed.include?("last_name")
+    contact.name = Contact.format_name("#{last_name} #{first_name}")
   end
 
 
@@ -99,21 +115,21 @@ class Person < ActiveRecord::Base
   def relative(user)
     relative = self.relatives.where(user_id: user.id).first
   end
-  
+
   def deep_xml(builder=nil)
     to_xml(
-      :builder => builder, :skip_instruct => true, :skip_types => true, 
+      :builder => builder, :skip_instruct => true, :skip_types => true,
       except: [:id, :created_at, :updated_at, :account_id, :avatar]
       ) do |xml|
       # contact.deep_xml(xml)
       xml.base64_avatar do
-        xml.filename self.avatar.file.filename 
+        xml.filename self.avatar.file.filename
         xml.content self.base64_avatar
-      end  unless self.avatar_url == self.avatar.default_url      
-    end    
+      end  unless self.avatar_url == self.avatar.default_url
+    end
   end
-  
-  def self.from_merciedgar_hash(person_attributes, imported_at, custom_tags)  
+
+  def self.from_merciedgar_hash(person_attributes, imported_at, custom_tags)
     avatar_attributes = person_attributes.delete("base64_avatar")
     contact_attributes = person_attributes.delete("contact") || {}
     first_name = person_attributes.delete("first_name")
@@ -126,12 +142,12 @@ class Person < ActiveRecord::Base
       person = duplicates.where(imported_at: imported_at).first.try(:fine_model)
       unless person
         fname = "#{first_name} ##{nb_duplicates + 1}"
-        
+
         person = Person.new(last_name:last_name, first_name:fname)
         logger.info {"CONTACT ATTRIBUTES --------- #{contact_attributes}"}
 
       end
-      
+
     end
     person.assign_attributes(person_attributes)
     person.upload_base64_avatar(avatar_attributes) if avatar_attributes.present?
@@ -140,6 +156,48 @@ class Person < ActiveRecord::Base
     person.contact.duplicate = old_person.contact if old_person
     person.contact.add_custom_tags(custom_tags)
 
+    person
+  end
+
+  def self.get_or_init_by_name(name, imported_at)
+    normalize_name = Contact.format_name(name.strip)
+    person = Person.joins(:contact).where(contacts: { name: normalize_name }).first_or_initialize if name.present?
+    unless person.new_record?
+      old_person = person
+      duplicates = Contact.where("name LIKE ?", "#{person.name} #%")
+      nb_duplicates = duplicates.size
+      person = duplicates.where(imported_at: imported_at).first.try(:fine_model)
+      unless person
+        fname = "#{first_name} ##{nb_duplicates + 1}"
+
+        person = Person.new(last_name:last_name, first_name:fname)
+        logger.info {"CONTACT ATTRIBUTES --------- #{contact_attributes}"}
+
+      end
+    end
+    person
+
+  end
+
+  def self.from_csv(row)
+    if row[:first_name_last_name_order] == "first_name"
+      old_name = row[:nom]
+      words = old_name.split(' ')
+      first_name = words.shift
+      last_name = words.join(' ') if words.present?
+      row[:nom] = [last_name, first_name].join(' ')
+    end
+    contact, invalid_keys = Contact.from_csv(row) #TODO
+    person = nil
+    if contact.new_record?
+      person = Person.new
+      person.name = contact.name
+      person.contact = contact
+    else
+      if contact.contactable.kind_of?(Person)
+        person = contact.contactable
+      end
+    end
     person
   end
 

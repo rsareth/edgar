@@ -17,18 +17,16 @@ Edgar::Application.configure do
   config.action_mailer.default_url_options = { :host => 'www.lvh.me:3000' }
   config.action_mailer.delivery_method = :smtp
   # change to true to allow email to be sent during development
-  config.action_mailer.perform_deliveries = false
+  config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.default :charset => "utf-8"
 
-    config.action_mailer.smtp_settings = {
-      :address   => "smtp.mandrillapp.com",
-      :port      => 587,
-      :user_name => ENV["MANDRILL_USERNAME"],
-      :password  => ENV["MANDRILL_API_KEY"]
-    }
-
-
+  config.action_mailer.smtp_settings = {
+    :address   => "smtp.mandrillapp.com",
+    :port      => 587,
+    :user_name => ENV["MANDRILL_USERNAME"],
+    :password  => ENV["MANDRILL_API_KEY"]
+  }
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
@@ -43,9 +41,12 @@ Edgar::Application.configure do
   # with SQLite, MySQL, and PostgreSQL)
   config.active_record.auto_explain_threshold_in_seconds = 0.5
 
-  # Do not compress assets
+  config.assets.enabled = true
   config.assets.compress = false
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  config.log_level = :debug
+
 end
