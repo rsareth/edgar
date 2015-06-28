@@ -12,7 +12,7 @@ RUN     echo 'source /etc/profile.d/rvm.sh' >> ~/.bash_profile
 RUN     echo "gem: --no-rdoc --no-ri" >> ~/.gemrc
 RUN     /bin/bash -l -c "rvm requirements"
 RUN     /bin/bash -l -c "rvm autolibs enable"
-RUN     /bin/bash -l -c "rvm install 2.0.0-p643"
+RUN     /bin/bash -l -c "rvm install 2.0.0-p598"
 RUN     /bin/bash -l -c "gem install bundle"
 
 # Create a specific user for Merci Edgar
