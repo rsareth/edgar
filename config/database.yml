@@ -11,13 +11,11 @@ development:
   <<: *config
 
 development_docker:
-  adapter: postgresql
-  encoding: unicode
   host: <%= ENV['POSTGRES_PORT_5432_TCP_ADDR']%>
   database: <%= ENV['POSTGRES_ENV_POSTGRES_DB']%>
-  pool: 5
   username: <%= ENV['POSTGRES_ENV_POSTGRES_USER'] %>
   password: <%= ENV['EDGAR_DB_PASSWORD'] %>
+  <<: *config
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
