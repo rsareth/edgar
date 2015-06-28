@@ -51,7 +51,7 @@ gem 'slim'
 
 gem 'newrelic_rpm'
 
-group :development do
+group :development, :development_docker do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'awesome_print'
