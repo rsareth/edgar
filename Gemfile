@@ -59,6 +59,8 @@ group :development, :development_docker do
   gem 'hub', :require=>nil
   gem 'byebug'
   gem 'annotate'
+  gem 'execjs'
+  gem 'therubyracer'
 end
 group :development, :test do
   gem 'foreman'
