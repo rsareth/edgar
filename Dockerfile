@@ -31,6 +31,9 @@ USER    root
 RUN     /bin/bash -l -c "bundle install"
 
 # Auto run the rails app
+USER    rails
 EXPOSE  3000
+ADD     build /build
+RUN     /build/build.sh
 ENV     RAILS_ENV development_docker
 CMD     ["/var/rails/edgar/script/edgar-entrypoint.sh"]
